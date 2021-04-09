@@ -38,51 +38,65 @@ BUFG bufg_inst (.I (clk_pll_local), .O (clk_pll));
 reg clk_pll_resetn;
 always @(posedge clk_pll) clk_pll_resetn <= pll_lock;
 
-jtag_axi inst_jtag_axi (
-    .aclk (clk_pll),
-    .aresetn (clk_pll_resetn),
+localparam C_M_AXI_ADDR_WIDTH = 32;
+localparam C_M_AXI_DATA_WIDTH = 32;
 
-    .m_axi_awid (awid), // undocumented
-    .m_axi_awaddr (awaddr),
-    .m_axi_awlen (awlen),
-    .m_axi_awsize (awsize),
-    .m_axi_awburst (awburst),
-    .m_axi_awlock (awlock),
-    .m_axi_awcache (awcache),
-    .m_axi_awprot (awprot), // constant
-    .m_axi_awqos (awqos), // undocumented
-    .m_axi_awvalid (awvalid),
-    .m_axi_awready (awready),
+wire awready;
+wire awvalid;
+wire [C_M_AXI_ADDR_WIDTH-1:0] awaddr;
+wire [C_M_AXI_DATA_WIDTH-1:0] wdata;
+wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
+wire wready;
+wire wvalid;
+wire [C_M_AXI_ADDR_WIDTH-1:0] wdata;
+wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
+wire wlast;
+wire bready;
+wire bvalid;
+wire [0:0] bid;
+wire [1:0] bresp;
+wire [C_M_AXI_ADDR_WIDTH-1:0] araddr;
+wire arvalid;
+wire arready;
+wire [0:0] rid;
+wire [C_M_AXI_DATA_WIDTH-1:0] rdata;
+wire [1:0] rresp;
+wire rlast;
+wire rvalid;
+wire rready;
 
-    .m_axi_wdata (wdata),
-    .m_axi_wstrb (wstrb),
-    .m_axi_wlast (wlast),
-    .m_axi_wvalid (wvalid),
-    .m_axi_wready (wready),
-
-    .m_axi_bid (bid),
-    .m_axi_bresp (bresp),
-    .m_axi_bvalid (bvalid),
-    .m_axi_bready (bready),
-
-    .m_axi_arid (arid),
-    .m_axi_araddr (araddr),
-    .m_axi_arlen (arlen),
-    .m_axi_arsize (arsize),
-    .m_axi_arburst (arburst),
-    .m_axi_arlock (arlock),
-    .m_axi_arcache (arcache),
-    .m_axi_arprot (arprot),
-    .m_axi_arqos (arqos),
-    .m_axi_arvalid (arvalid),
-    .m_axi_arready (arready),
-
-    .m_axi_rid (rid),
-    .m_axi_rdata (rdata),
-    .m_axi_rresp (rresp),
-    .m_axi_rlast (rlast),
-    .m_axi_rvalid (rvalid),
-    .m_axi_rready (rready)
+jtag_axi_xip inst_jtag_axi_xip (
+        .aclk (clk_pll),
+        .aresetn (clk_pll_resetn),
+    // write address channel
+        .m_axi_awready (awready),
+        .m_axi_awvalid (awvalid),
+        .m_axi_awaddr (awaddr),
+    // write data channel
+        .m_axi_wready (wready),
+        .m_axi_wvalid (wvalid),
+        .m_axi_wdata (wdata),
+        .m_axi_wstrb (wstrb),
+        .m_axi_wlast (wlast),
+    // write response channel
+        .m_axi_bready (bready),
+        .m_axi_bvalid (bvalid),
+        .m_axi_bid (bid),
+        .m_axi_bresp (bresp),
+    // read address channel
+        .m_axi_arid (arid),
+        .m_axi_araddr (araddr),
+        .m_axi_arlock (arlock),
+        .m_axi_arqos (arqos),
+        .m_axi_arvalid (arvalid),
+        .m_axi_arready (arready),
+    // read data channel
+        .m_axi_rid (rid),
+        .m_axi_rdata (rdata),
+        .m_axi_rresp (rresp),
+        .m_axi_rlast (rlast),
+        .m_axi_rvalid (rvalid),
+        .m_axi_rready (rready)
 );
 `endif
 endmodule

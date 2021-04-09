@@ -62,6 +62,12 @@ set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 ################################################################################
+# Bitstream Parameters
+
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
+################################################################################
 # Thermal Parameters
 
 set_operating_conditions -airflow 0 -heatsink none

@@ -16,5 +16,5 @@ clean:
 
 .PHONY: cleaner
 cleaner: clean
-	${RM} -r .Xil/
+	${RM} -r .Xil/ .hbs/ .srcs/
 	${RM} -r vivado*
