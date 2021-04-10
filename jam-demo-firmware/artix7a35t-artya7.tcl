@@ -20,5 +20,4 @@ phys_opt_design -directive AggressiveExplore -verbose
 route_design -directive Explore -tns_cleanup -verbose
 phys_opt_design -directive AggressiveExplore -verbose
 set_property BITSTREAM.CONFIG.USERID 0xCAFEDECA [current_design]
-write_bitstream -force -file artya7c.bit -verbose
-
+write_bitstream -force -file jam-demo-artya7ca35t.bit -verbose

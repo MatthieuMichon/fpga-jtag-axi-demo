@@ -14,10 +14,10 @@ module artya7c #(
 	output reg [8-1:0] jd
 );
 // -----------------------------------------------------------------------------
-`ifdef vivado
 
 wire pll_lock;
 wire clk_pll_local;
+wire clk_pll;
 wire fb;
 
 localparam real CLKOUT0_DIVIDE_F = 1200.0/(1.0 * TARGET_FREQUENCY);
@@ -41,29 +41,30 @@ always @(posedge clk_pll) clk_pll_resetn <= pll_lock;
 localparam C_M_AXI_ADDR_WIDTH = 32;
 localparam C_M_AXI_DATA_WIDTH = 32;
 
-wire awready;
-wire awvalid;
-wire [C_M_AXI_ADDR_WIDTH-1:0] awaddr;
-wire [C_M_AXI_DATA_WIDTH-1:0] wdata;
-wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
-wire wready;
-wire wvalid;
-wire [C_M_AXI_ADDR_WIDTH-1:0] wdata;
-wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
-wire wlast;
-wire bready;
-wire bvalid;
-wire [0:0] bid;
-wire [1:0] bresp;
-wire [C_M_AXI_ADDR_WIDTH-1:0] araddr;
-wire arvalid;
-wire arready;
-wire [0:0] rid;
-wire [C_M_AXI_DATA_WIDTH-1:0] rdata;
-wire [1:0] rresp;
-wire rlast;
-wire rvalid;
-wire rready;
+(* dont_touch = "true" *) wire awready;
+(* dont_touch = "true" *) wire awvalid;
+(* dont_touch = "true" *) wire [C_M_AXI_ADDR_WIDTH-1:0] awaddr;
+(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH-1:0] wdata;
+(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
+(* dont_touch = "true" *) wire wready;
+(* dont_touch = "true" *) wire wvalid;
+(* dont_touch = "true" *) wire wlast;
+(* dont_touch = "true" *) wire bready;
+(* dont_touch = "true" *) wire bvalid;
+(* dont_touch = "true" *) wire [0:0] bid;
+(* dont_touch = "true" *) wire [1:0] bresp;
+(* dont_touch = "true" *) wire arid;
+(* dont_touch = "true" *) wire [C_M_AXI_ADDR_WIDTH-1:0] araddr;
+(* dont_touch = "true" *) wire arlock;
+(* dont_touch = "true" *) wire arqos;
+(* dont_touch = "true" *) wire arvalid;
+(* dont_touch = "true" *) wire arready;
+(* dont_touch = "true" *) wire [0:0] rid;
+(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH-1:0] rdata;
+(* dont_touch = "true" *) wire [1:0] rresp;
+(* dont_touch = "true" *) wire rlast;
+(* dont_touch = "true" *) wire rvalid;
+(* dont_touch = "true" *) wire rready;
 
 jtag_axi_xip inst_jtag_axi_xip (
         .aclk (clk_pll),
@@ -98,5 +99,14 @@ jtag_axi_xip inst_jtag_axi_xip (
         .m_axi_rvalid (rvalid),
         .m_axi_rready (rready)
 );
-`endif
+
+assign ja = awaddr[$bits(ja)-1:0];
+assign jb = wdata[$bits(ja)-1:0];
+assign jc = araddr[$bits(ja)-1:0];
+assign jd = rdata[$bits(ja)-1:0];
+
+ila_xip inst_ila_xip (
+    .clk (clk_pll),
+    .probe0 (awaddr)
+);
 endmodule
