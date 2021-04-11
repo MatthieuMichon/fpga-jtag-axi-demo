@@ -25,9 +25,14 @@ proc synthesize {} {
 	phys_opt_design -directive AggressiveExplore -verbose
 	set_property BITSTREAM.CONFIG.USERID 0xCAFEDECA [current_design]
 	write_bitstream -force -file jam-demo-artya7ca35t.bit -verbose
+
+	report_ram_utilization -include_lutram -file ram_utilization_report.txt
+	report_utilization -packthru -file utilization_packthru_report.txt
+	report_utilization -packthru -hierarchical -file utilization_packthru_hier_report.txt
+	report_timing_summary -path_type summary -file timing_summary_report.txt
 }
 
-proc reconfigure {
+proc reconfigure {} {
 	open_hw_manager
 	connect_hw_server
 	open_hw_target

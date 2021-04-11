@@ -9,7 +9,7 @@ ${BIT_FILE}: artya7c.sv artya7c.xdc
 
 .PHONY: board-reconfigure
 board-reconfigure: ${BIT_FILE}
-	vivado ${VFLAGS} -tclargs load-bitstream $<
+	vivado ${VFLAGS} -tclargs reconfigure
 
 .PHONY: clean
 clean:
@@ -20,3 +20,4 @@ cleaner: clean
 	${RM} -r .Xil/ .hbs/ .srcs/
 	${RM} -r usage_statistics_webtalk.*
 	${RM} -r vivado*
+	${RM} -r *_report.txt

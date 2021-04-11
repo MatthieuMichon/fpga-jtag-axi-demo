@@ -4,3 +4,4 @@
 usage_statistics_webtalk.*
 vivado*
 *.bit
+*_report.txt
