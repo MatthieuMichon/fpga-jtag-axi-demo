@@ -1,6 +1,8 @@
 
+.PHONY: board-reconfigure
+board-reconfigure: ${BIT_FILE}
+	$(MAKE) $@ -C jam-demo-firmware/ MAKEFLAGS=
 
 .PHONY: clean
 clean:
-	rm -rf jam-demo-firmware/jam-demo-a7a35t.bit
-	
+	$(MAKE) $@ -C jam-demo-firmware/ MAKEFLAGS=

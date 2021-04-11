@@ -5,7 +5,7 @@ VFLAGS = ${BATCH_MODE} ${NO_JOURNAL} ${TCL_SCRIPT}
 BIT_FILE = jam-demo-artya7ca35t.bit
 
 ${BIT_FILE}: artya7c.sv artya7c.xdc
-	vivado ${VFLAGS} -tclargs synthesize $<
+	vivado ${VFLAGS} -tclargs synthesize
 
 .PHONY: board-reconfigure
 board-reconfigure: ${BIT_FILE}
