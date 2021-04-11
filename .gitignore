@@ -1,0 +1,6 @@
+.Xil/
+.hbs/
+.srcs/
+usage_statistics_webtalk.*
+vivado*
+*.bit
