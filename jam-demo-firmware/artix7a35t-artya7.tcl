@@ -34,13 +34,13 @@ proc synthesize {} {
 
 proc reconfigure {} {
 	open_hw_manager
-	connect_hw_server
+	connect_hw_server -url 127.0.0.1:3121
 	open_hw_target
-	set_property PROGRAM.FILE ${bit_file} [lindex [get_hw_devices] 0]
+	set_property PROGRAM.FILE jam-demo-artya7ca35t.bit [lindex [get_hw_devices] 0]
 	program_hw_devices [lindex [get_hw_devices] 0]
 	refresh_hw_device -update_hw_probes false [current_hw_device]
 	set userid [get_property REGISTER.USERCODE [current_hw_device]]
-	puts $userid
+	puts "Readback userid: $userid"
 	close_hw_target
 	disconnect_hw_server
 	close_hw_manager
