@@ -1,11 +1,14 @@
+variable part xc7a35t-csg324-1
+variable bd_project_name simple_bd
+
 proc create_bd {} {
 	create_project \
-		-part xc7a35t-csg324-1 \
+		-part ${::part} \
 		-verbose \
-		bd_project \
-		vivado_bd_project_dir
+		${::bd_project_name} \
+		vivado_${::bd_project_name}
 
-	create_bd_design bd_design_1
+	create_bd_design ${::bd_project_name}
 
 	set clock [create_bd_port -dir I -type clk -freq_hz 100000000 clock]
 	set resetn [create_bd_port -dir I -type rst resetn]
@@ -44,29 +47,40 @@ proc create_bd {} {
 	validate_bd_design
 	save_bd_design
 
-	generate_target synthesis [get_files ./jam-demo-firmware/vivado_bd_project_dir/bd_project.srcs/sources_1/bd/bd_design_1/bd_design_1.bd]
+	generate_target all [get_files vivado_${::bd_project_name}/${::bd_project_name}.srcs/sources_1/bd/${::bd_project_name}/${::bd_project_name}.bd]
 }
 
 proc synthesize {} {
+	create_project -in_memory -part ${::part}
 	foreach sv_file [glob *.sv] {
 		read_verilog -sv ${sv_file}
 	}
 	foreach xdc_file [glob *.xdc] {
 		read_xdc ${xdc_file}
 	}
-	create_ip -name jtag_axi -module_name jtag_axi_xip
-	synth_ip [get_ips jtag_axi_xip]
+	set bd_file vivado_${::bd_project_name}/${::bd_project_name}.srcs/sources_1/bd/${::bd_project_name}/${::bd_project_name}.bd
+	read_bd ${bd_file}
+	open_bd_design ${bd_file}
+	#report_ip_status
+	set_property synth_checkpoint_mode None [get_files ${bd_file}]
+	generate_target all [get_files ${bd_file}]
 
-	create_ip -name ila -module_name ila_xip
-	set_property -dict [list \
-		CONFIG.C_PROBE0_WIDTH  32 \
-		CONFIG.C_DATA_DEPTH 1024 \
-		CONFIG.C_NUM_OF_PROBES 1 \
-	] [get_ips ila_xip]
-	synth_ip [get_ips ila_xip]
+	#create_ip -name jtag_axi -module_name jtag_axi_xip
+	# synth_ip [get_ips jtag_axi_xip]
 
-	synth_design -top artya7c -part xc7a35t-csg324-1 -flatten_hierarchy none \
-		-verilog_define synthesis -verbose
+	# create_ip -name ila -module_name ila_xip
+	# set_property -dict [list \
+	# 	CONFIG.C_PROBE0_WIDTH  32 \
+	# 	CONFIG.C_DATA_DEPTH 1024 \
+	# 	CONFIG.C_NUM_OF_PROBES 1 \
+	# ] [get_ips ila_xip]
+	# synth_ip [get_ips ila_xip]
+
+	synth_design \
+		-top artya7c \
+		-flatten_hierarchy none \
+		-verilog_define synthesis \
+		-verbose
 	opt_design -directive ExploreSequentialArea -verbose
 	place_design -directive ExtraPostPlacementOpt -timing_summary -verbose
 	phys_opt_design -directive AggressiveExplore -verbose

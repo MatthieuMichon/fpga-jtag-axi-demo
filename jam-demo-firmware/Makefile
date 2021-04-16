@@ -1,16 +1,26 @@
 BATCH_MODE = -mode batch
 NO_JOURNAL = -nojournal
+NO_TRACE = -notrace
 TCL_SCRIPT = -source artix7a35t-artya7.tcl
-VFLAGS = ${BATCH_MODE} ${NO_JOURNAL} ${TCL_SCRIPT}
+VFLAGS = ${BATCH_MODE} ${NO_JOURNAL} ${TCL_SCRIPT} ${NO_TRACE}
 BIT_FILE = jam-demo-artya7ca35t.bit
 SV_FILES := $(wildcard *.sv)
 XDC_FILES := ${wildcard *.xdc}
+BD_FILE = vivado_simple_bd/simple_bd.srcs/sources_1/bd/simple_bd/simple_bd.bd
 
-.PHONY: create_bd
-create_bd:
+.PHONY: all
+all: board-reconfigure
+
+.PHONY: bd
+bd: ${BD_FILE}
+
+${BD_FILE}:
 	vivado ${VFLAGS} -tclargs create_bd
 
-${BIT_FILE}: ${SV_FILES} ${XDC_FILES}
+.PHONY: bitstream
+bitstream: ${BIT_FILE}
+
+${BIT_FILE}: ${SV_FILES} ${XDC_FILES} ${BD_FILE}
 	vivado ${VFLAGS} -tclargs synthesize
 
 .PHONY: board-reconfigure

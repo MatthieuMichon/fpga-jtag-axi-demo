@@ -38,75 +38,9 @@ BUFG bufg_inst (.I (clk_pll_local), .O (clk_pll));
 reg clk_pll_resetn;
 always @(posedge clk_pll) clk_pll_resetn <= pll_lock;
 
-localparam C_M_AXI_ADDR_WIDTH = 32;
-localparam C_M_AXI_DATA_WIDTH = 32;
-
-(* dont_touch = "true" *) wire awready;
-(* dont_touch = "true" *) wire awvalid;
-(* dont_touch = "true" *) wire [C_M_AXI_ADDR_WIDTH-1:0] awaddr;
-(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH-1:0] wdata;
-(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH/8-1:0] wstrb;
-(* dont_touch = "true" *) wire wready;
-(* dont_touch = "true" *) wire wvalid;
-(* dont_touch = "true" *) wire wlast;
-(* dont_touch = "true" *) wire bready;
-(* dont_touch = "true" *) wire bvalid;
-(* dont_touch = "true" *) wire [0:0] bid;
-(* dont_touch = "true" *) wire [1:0] bresp;
-(* dont_touch = "true" *) wire arid;
-(* dont_touch = "true" *) wire [C_M_AXI_ADDR_WIDTH-1:0] araddr;
-(* dont_touch = "true" *) wire arlock;
-(* dont_touch = "true" *) wire arqos;
-(* dont_touch = "true" *) wire arvalid;
-(* dont_touch = "true" *) wire arready;
-(* dont_touch = "true" *) wire [0:0] rid;
-(* dont_touch = "true" *) wire [C_M_AXI_DATA_WIDTH-1:0] rdata;
-(* dont_touch = "true" *) wire [1:0] rresp;
-(* dont_touch = "true" *) wire rlast;
-(* dont_touch = "true" *) wire rvalid;
-(* dont_touch = "true" *) wire rready;
-
-jtag_axi_xip inst_jtag_axi_xip (
-        .aclk (clk_pll),
-        .aresetn (clk_pll_resetn),
-    // write address channel
-        .m_axi_awready (awready),
-        .m_axi_awvalid (awvalid),
-        .m_axi_awaddr (awaddr),
-    // write data channel
-        .m_axi_wready (wready),
-        .m_axi_wvalid (wvalid),
-        .m_axi_wdata (wdata),
-        .m_axi_wstrb (wstrb),
-        .m_axi_wlast (wlast),
-    // write response channel
-        .m_axi_bready (bready),
-        .m_axi_bvalid (bvalid),
-        .m_axi_bid (bid),
-        .m_axi_bresp (bresp),
-    // read address channel
-        .m_axi_arid (arid),
-        .m_axi_araddr (araddr),
-        .m_axi_arlock (arlock),
-        .m_axi_arqos (arqos),
-        .m_axi_arvalid (arvalid),
-        .m_axi_arready (arready),
-    // read data channel
-        .m_axi_rid (rid),
-        .m_axi_rdata (rdata),
-        .m_axi_rresp (rresp),
-        .m_axi_rlast (rlast),
-        .m_axi_rvalid (rvalid),
-        .m_axi_rready (rready)
+simple_bd inst_simple_bd (
+    .clock (clk_pll),
+    .resetn (clk_pll_resetn)
 );
 
-assign ja = awaddr[$bits(ja)-1:0];
-assign jb = wdata[$bits(ja)-1:0];
-assign jc = araddr[$bits(ja)-1:0];
-assign jd = rdata[$bits(ja)-1:0];
-
-ila_xip inst_ila_xip (
-    .clk (clk_pll),
-    .probe0 (awaddr)
-);
 endmodule
