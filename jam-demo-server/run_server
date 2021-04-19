@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BATCH_MODE="-mode batch"
+NO_JOURNAL="-nojournal"
+NO_TRACE="-notrace"
+TCL_SCRIPT="-source axi_transaction_server.tcl"
+VFLAGS="${BATCH_MODE} ${NO_JOURNAL} ${TCL_SCRIPT} ${NO_TRACE}"
+
+vivado ${VFLAGS} -tclargs 9900

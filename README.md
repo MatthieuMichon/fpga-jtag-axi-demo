@@ -1,15 +1,48 @@
 # Xilinx AXI JTAG Demo
 
+Remotely control FPGA-based AXI buses. This repository hosts the source code for a *simple* application showcasing an implementation for issuing remotely read and write commands on an AXI4 bus using a TCP socket.
+
+> :memo: Note:
+> 
+> Only Digilent [Arty A7][d-arty] FPGA boards are supported. 
+
+comprising of a FPGA firmware; TCL script and Python client
+
 A basic demonstration showcasing how to remotely control an FPGA board through a Python script via the [JTAG][w-jtag] interface using Xilinx's `jtag_axi_master` IP core.
 
-## Usage
+## Quick Start
+
+### Configuring the FPGA
+
+Implementing the FPGA firmware and configuring the FPGA is managed by the `Makefile`:
 
 ```shell
-$ git clone <repo>
-$ cd <repo>
 $ make
-$ jtag_axi_tool
 ```
+
+### Launching the AXI Transaction Server
+
+```shell
+$ cd jam-demo-server/
+$ ./run_server
+```
+
+### Running Commands
+
+```shell
+$ nc 127.0.0.1 9900
+version
+2020.1
+quit
+```
+
+Supported commands:
+
+- [x] version
+- [ ] read
+- [ ] write
+- [x] quit
+
 
 ## FPGA Firmware
 

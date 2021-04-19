@@ -61,20 +61,8 @@ proc synthesize {} {
 	set bd_file vivado_${::bd_project_name}/${::bd_project_name}.srcs/sources_1/bd/${::bd_project_name}/${::bd_project_name}.bd
 	read_bd ${bd_file}
 	open_bd_design ${bd_file}
-	#report_ip_status
 	set_property synth_checkpoint_mode None [get_files ${bd_file}]
 	generate_target all [get_files ${bd_file}]
-
-	#create_ip -name jtag_axi -module_name jtag_axi_xip
-	# synth_ip [get_ips jtag_axi_xip]
-
-	# create_ip -name ila -module_name ila_xip
-	# set_property -dict [list \
-	# 	CONFIG.C_PROBE0_WIDTH  32 \
-	# 	CONFIG.C_DATA_DEPTH 1024 \
-	# 	CONFIG.C_NUM_OF_PROBES 1 \
-	# ] [get_ips ila_xip]
-	# synth_ip [get_ips ila_xip]
 
 	synth_design \
 		-top artya7c \

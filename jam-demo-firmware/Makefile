@@ -27,7 +27,6 @@ ${BIT_FILE}: ${SV_FILES} ${XDC_FILES} ${BD_FILE}
 board-reconfigure: ${BIT_FILE}
 	vivado ${VFLAGS} -tclargs reconfigure
 
-
 .PHONY: clean
 clean:
 	${RM} ${BIT_FILE}
