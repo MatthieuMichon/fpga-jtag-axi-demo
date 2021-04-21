@@ -34,7 +34,7 @@ quit
 Supported commands:
 
 - [x] version
-- [ ] read
+- [x] read
 - [ ] write
 - [x] quit
 

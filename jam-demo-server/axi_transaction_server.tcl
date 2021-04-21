@@ -2,9 +2,10 @@ set server_port [lindex $argv 0]
 
 proc open_jtag {} {
     catch close_hw
-    open_hw
+    open_hw_manager
     connect_hw_server -url 127.0.0.1:3121
     open_hw_target
+    refresh_hw_device -update_hw_probes false [current_hw_device]
 }
 
 proc vivado_command_server {channel clientaddr clientport} {
@@ -24,7 +25,7 @@ proc vivado_command_server {channel clientaddr clientport} {
             }
             read {
                 create_hw_axi_txn -force rd_txn1 [get_hw_axis hw_axi_1] -address ${addr} -type read
-                set data [run_hw_axi rd_txn1]
+                set data [get_property DATA [get_hw_axi_txns  rd_txn1]]
                 puts ${channel} "read @0x${addr}: 0x${data}"
             }
             quit {
