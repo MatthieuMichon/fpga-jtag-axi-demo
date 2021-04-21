@@ -1,4 +1,3 @@
-
 .PHONY: board-reconfigure
 board-reconfigure:
 	$(MAKE) $@ -C jam-demo-firmware/ MAKEFLAGS=

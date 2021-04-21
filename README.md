@@ -6,15 +6,11 @@ Remotely control FPGA-based AXI buses. This repository hosts the source code for
 > 
 > Only Digilent [Arty A7][d-arty] FPGA boards are supported. 
 
-comprising of a FPGA firmware; TCL script and Python client
-
-A basic demonstration showcasing how to remotely control an FPGA board through a Python script via the [JTAG][w-jtag] interface using Xilinx's `jtag_axi_master` IP core.
-
 ## Quick Start
 
 ### Configuring the FPGA
 
-Implementing the FPGA firmware and configuring the FPGA is managed by the `Makefile`:
+First thing is to build a *bitstream* (aka FPGA configuration file) embedding the required IP cores. The `Makefile` file present in the root directory provides a default targets which builds the required bitstream and loads it into an Arty A7 hooked on the host.
 
 ```shell
 $ make
@@ -23,8 +19,7 @@ $ make
 ### Launching the AXI Transaction Server
 
 ```shell
-$ cd jam-demo-server/
-$ ./run_server
+$ ./jam-demo-server/run_server
 ```
 
 ### Running Commands
