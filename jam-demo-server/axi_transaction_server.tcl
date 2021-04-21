@@ -8,6 +8,8 @@ proc open_jtag {} {
 }
 
 proc vivado_command_server {channel clientaddr clientport} {
+    global disconnect
+    fconfigure ${channel} -buffering none
     flush ${channel}
     puts "axi_transaction_server: new client: ${clientaddr}:${clientport}"
     while { true } {
@@ -26,6 +28,7 @@ proc vivado_command_server {channel clientaddr clientport} {
                 puts ${channel} "read @0x${addr}: 0x${data}"
             }
             quit {
+                puts ${channel} "Closing"
                 break
             }
             default {
@@ -34,11 +37,21 @@ proc vivado_command_server {channel clientaddr clientport} {
         }
         flush ${channel}
     }
+    flush ${channel}
+    close ${channel}
     puts "axi_transaction_server: exiting"
-    close $channel
-    exit
+    set disconnect true
 }
 
-#open_jtag
-socket -server vivado_command_server $server_port
-vwait connection_state
+proc close_jtag {} {
+	close_hw_target
+	disconnect_hw_server
+	close_hw_manager
+}
+
+open_jtag
+set server [socket -server vivado_command_server ${server_port}]
+vwait disconnect
+close ${server}
+close_jtag
+exit
