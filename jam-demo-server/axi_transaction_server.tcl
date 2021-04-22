@@ -25,8 +25,15 @@ proc vivado_command_server {channel clientaddr clientport} {
             }
             read {
                 create_hw_axi_txn -force rd_txn1 [get_hw_axis hw_axi_1] -address ${addr} -type read
+                run_hw_axi [get_hw_axi_txns rd_txn1]
                 set data [get_property DATA [get_hw_axi_txns  rd_txn1]]
                 puts ${channel} "read @0x${addr}: 0x${data}"
+            }
+            write {
+                create_hw_axi_txn -force wr_txn1 [get_hw_axis hw_axi_1] -address ${addr} -data ${data} -type write
+                run_hw_axi [get_hw_axi_txns wr_txn1]
+                set data [get_propert DATA [get_hw_axi_txns  wr_txn1]]
+                puts ${channel} "write @0x${addr}: 0x${data}"
             }
             quit {
                 puts ${channel} "Closing"

@@ -28,15 +28,21 @@ $ ./jam-demo-server/run_server
 $ nc 127.0.0.1 9900
 version
 2020.1
+read C0000000 1
+read @0xC0000000: 0x00000000
+write C0000000 cafedeca
+write @0xC0000000: 0xcafedeca
+read C0000000 1
+read @0xC0000000: 0xcafedeca
 quit
 ```
 
 Supported commands:
 
-- [x] version
-- [x] read
-- [ ] write
-- [x] quit
+- version
+- read
+- write
+- quit
 
 
 ## FPGA Firmware
